@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: ems-tech
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app

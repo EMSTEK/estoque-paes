@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>EMS-TECH - Estoque de Pães</title>
+  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+  <style>
+    body { background: #f0f9ff; font-family: Arial; padding: 1rem; color: #003366; }
+    h1 { text-align: center; color: #006400; }
+    .form, .relatorios { max-width: 500px; margin: auto; background: #fffacd; padding: 1rem; border-radius: 10px; border: 2px solid #008000; }
+    input, button { width: 100%; margin: 0.5rem 0; padding: 0.5rem; border-radius: 6px; }
+    ul { list-style: none; padding: 0; }
+    li { background: #e6f7ff; margin: 0.5rem 0; padding: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .delete, .saida { margin-left: 5px; background: #ff4500; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; }
+    button { background-color: #008000; color: white; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1><img src="{{ url_for('static', filename='logo.png') }}" alt="EMS-TECH" width="150"></h1>
+
+  <form action="/adicionar" method="POST" class="form">
+    <input type="text" name="nome" placeholder="Nome do pão" required />
+    <input type="number" name="quantidade" placeholder="Quantidade" required />
+    <button type="submit">Adicionar ao Estoque</button>
+    <a href="/backup"><button type="button">📁 Fazer Backup</button></a>
+  </form>
+
+  <div class="form">
+    <h2>📊 Totais</h2>
+    <p><strong>Entradas:</strong> {{ entrada_total }}</p>
+    <p><strong>Saídas:</strong> {{ saida_total }}</p>
+  </div>
+
+  <h2 style="text-align: center;">📦 Estoque Atual</h2>
+  <ul>
+    {% for pao in estoque %}
+      <li>
+        <span>{{ pao.nome }} - Quantidade: {{ pao.quantidade }}</span>
+        <div>
+          <a href="/saida/{{ pao.nome }}"><button class="saida">-1</button></a>
+          <a href="/remover/{{ pao.nome }}"><button class="delete">🗑</button></a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="relatorios">
+    <h2>📉 Relatório de Saída</h2>
+    <ul>
+      {% for nome, qtd in relatorio.items() %}
+        <li>{{ nome }}: {{ qtd }} retiradas</li>
+      {% endfor %}
+    </ul>
+    <a href="/limpar_relatorio">
+      <button style="background: red; color: white;">🧹 Limpar Relatório</button>
+    </a>
+  </div>
+</body>
+</html>
